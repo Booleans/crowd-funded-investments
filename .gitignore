@@ -10,3 +10,4 @@ __pycache__/
 .ipynb_checkpoints
 *.pkl.bz2
 *PMTHIST*
+*.DS_Store*
