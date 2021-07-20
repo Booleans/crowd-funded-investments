@@ -22,7 +22,7 @@ _________________________
 _________________________
 
 1. [Background](#background)
-2. [Data](#data)
+2. [Loan Data](#data)
 
 
 ## Background
@@ -35,10 +35,33 @@ Investors on the Lending Club platform can "invest" to fund Bob's loan. You inve
 
 This scenario is a win for both the borrower and the investors. Bob gets to pay off his debt at a lower interest rate, saving thousands in interest payments and penalties. Investors win by (hopefully) earning a significant return on their investment.
 
-Investors don't want to lose money though, so can we train a machine learning algorithm to predict the return on investment of a LendingClub loan? This will allow us to avoid loans that are going to offer low or negative returns. 
+Investors don't want to lose money though, so can we train a machine learning algorithm to predict the return on investment of a LendingClub loan? This would allow us to avoid loans that are going to offer low or negative returns. 
 
-## Data
+## Loan Data
 
+Lending Club had previously made all of their loan issuance and loan payments data public. 
+
+Lending Club changed their credit model in response to loan defaults caused by "The Great Recession" in 2008. As a result, I have chosen to use only those loans issued in January 2010 or later. I have also chosen to exclude 60 month loans and focus on the 36 month loans, as there are more completed loans available to train on. In the future I will expand this analysis to include 60 month loans. 
+
+This results in:
+
+* 1,894,891 total loans
+* 
+
+| Feature Name        | Description                                                                          |
+|---------------------|--------------------------------------------------------------------------------------|
+| `loan_amnt`           | The amount being borrowed.                                                           |
+| `int_rate`            | Interest rate of the loan.                                                           |
+| `grade`               | What grade (A-F) has Lending Club's internal credit model assigned to this borrower? |
+| `emp_length`          | How long has the borrower been employed at their current job?                        |
+| `home_ownership`      | Does the borrower rent or own their home?                                            |
+| `annual_inc `         | What is the borrower's annual income?                                                |
+| `verification_status` | Has the borrower's self-reported income information been verified?                   |
+| `purpose `            | What is the purpose of the loan?                                                     |
+| `dti`                 | What is the borrower's debt-to-income ratio?                                         |
+| `installment `        | Monthly payment due from borrower.                                                   |
+
+Please see the [data dictionary](https://docs.google.com/spreadsheets/d/1d73eTwcifrFPEeMyrTd-3TjjvdDummkDu0tn_G-s7UY/edit?usp=sharing) for a full list of available features.
 
 ![Models](img/model_comparison.png)
 
