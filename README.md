@@ -32,7 +32,7 @@ _________________________
 
 The stock market has its purpose, but wouldn't you enjoy investing your money in real people? That is the goal of crowd-funded loans issued by [Lending Club](https://www.lendingclub.com/). Here's how it works:
 
-> Bob has \\$20,000 in credit card debt and is being charged 40\% interest by his credit card company. Bob comes to Lending Club hoping for a loan at a lower interest rate to help him pay off his debt quicker. Lending Club's non-traditional credit model decides that Bob isn't as risky of a borrower as he appears and should be paying a lower interest rate of, say 15\%. Lending Club then offers Bob a loan of \\$20,000 at 15\% interest in order to pay off his credit card debt. However, Lending Club will not be funding the loan itself. Instead, individual investors decide if they want to "crowd-fund" Bob's loan.
+> Bob has \$20,000 in credit card debt and is being charged 40\% interest by his credit card company. Bob comes to Lending Club hoping for a loan at a lower interest rate to help him pay off his debt quicker. Lending Club's non-traditional credit model decides that Bob isn't as risky of a borrower as he appears and should be paying a lower interest rate of, say 15\%. Lending Club then offers Bob a loan of \$20,000 at 15\% interest in order to pay off his credit card debt. However, Lending Club will not be funding the loan itself. Instead, individual investors decide if they want to "crowd-fund" Bob's loan.
 
 Investors on the Lending Club platform can "invest" to fund Bob's loan. You invest by funding a portion of the loan, and then you receive payments as he pays off the loan. However, if he defaults on his loan you lose your portion of the unpaid balance.
 
