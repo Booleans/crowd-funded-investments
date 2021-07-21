@@ -1,55 +1,88 @@
 # Social Capital
-### Predicting the Return on Investment (ROI) of Crowd-Funded Loans
+## Predicting the Return on Investment (ROI) of Crowd-Funded Loans
+
+#### 2021 Update:
+
+Effective December 31, 2020, Lending Club has retired the loan investment platform for individual investors. As a result, the models trained here can no longer be integerated with API calls to programmatically invest in new loans and no new data will be released. However, I will be continuing to use this dataset to experiment and expand my machine learning expertise. Some of the ideas I'm currently exploring:
+
+* Writing custom, asymmetric loss functions to penalize models more for overprediction than underprediction of ROI in the hopes of seeing improved portfolio performance
+
+* New boosting model types, including CatBoost and LightGBM
+
+* Ensembling of boosting models
+
+* SHAP value analysis for model interpretability
+
+* GPU acceleration, both for model training and SHAP analysis
+
+_________________________
+
+## Table of Contents
+_________________________
+
+1. [Background](#background)
+    * [Objective](#objective)
+2. [Loan Data](#data)
+3. [Exploratory Data Analysis](#exploratory-data-analysis)
+3. Machine Learning
+4. Portfolio Simulation
 
 
-![Models](img/model_comparison.png)
+## Background
 
-The stock market has it's purpose, but wouldn't you enjoy investing your money in real people? That is the goal of crowd-funded loans issued by [LendingClub](https://www.lendingclub.com/). Here's how it works:
+The stock market has its purpose, but wouldn't you enjoy investing your money in real people? That is the goal of crowd-funded loans issued by [Lending Club](https://www.lendingclub.com/). Here's how it works:
 
-> Bob comes to Lending Club with $20,000 in credit card debt. He's paying an interest rate of 40% on this debt. However, Lending Club's non-traditional credit model decides Bob can be loaned money at 15% instead. Lending Club offers Bob a $20,000 loan to pay off his credit card debt. However, this loan is not funded by the company itself. This loan will be crowd-funded by investors.
+> Bob has \\$20,000 in credit card debt and is being charged 40\% interest by his credit card company. Bob comes to Lending Club hoping for a loan at a lower interest rate to help him pay off his debt quicker. Lending Club's non-traditional credit model decides that Bob isn't as risky of a borrower as he appears and should be paying a lower interest rate of, say 15\%. Lending Club then offers Bob a loan of \\$20,000 at 15\% interest in order to pay off his credit card debt. However, Lending Club will not be funding the loan itself. Instead, individual investors decide if they want to "crowd-fund" Bob's loan.
 
-Investors on the Lending Club platform can "invest" to fund Bob's loan. You invest by funding a portion of the loan, and then you receive payments as Bob pays off the loan. However, if Bob defaults on his loan you lose your portion of the unpaid balance.
+Investors on the Lending Club platform can "invest" to fund Bob's loan. You invest by funding a portion of the loan, and then you receive payments as he pays off the loan. However, if he defaults on his loan you lose your portion of the unpaid balance.
 
-This scenario is a win for both Bob and the investors. Bob gets to pay off his debt at a lower interest rate, saving thousands in interest payments and penalties. Investors win by (hopefully) earning a significant return on their investment.
+This scenario is a win for both the borrower and the investors. Bob gets to pay off his debt at a lower interest rate, saving thousands in interest payments and penalties. Investors win by (hopefully) earning a significant return on their investment.
 
-Investors don't want to lose money though, so can we train a machine learning algorithm to predict the return on investment of a LendingClub loan? This will allow us to avoid loans that are going to offer low or negative returns. 
+Investors don't want to lose money though, which leads us to our objective:
 
-Eventually I will host my trained model as an API and use AWS Lambda jobs to automatically choose loans to invest my money in.
+### Objective
 
-## Explanatory Notebooks
+Train a machine learning model to accurately predict the return on investment (ROI) of Lending Club loans. Integrate this model with code that was written previously to programmatically invest in loans through Lending Club's investor API. Use this system to help my friends and family with Lending Club accounts avoid loans with low or negative returns. 
 
-Below, you'll find several notebooks and README sections walking you through the project.
+## Loan Data
 
-1. [Data Cleaning](Coming Soon, please review the data-cleaning.py file)
-2. [Exploratory Data Analysis](Coming Soon)
-3. [Calculating ROI](Coming Soon)
-4. [Model Training](Modeling.ipynb)
-5. [Portfolio Simulation](Simulation.ipynb)
-6. [SHAP Analysis](Coming Soon)
-7. [Future Work](#future-work)
-8. [Data Sources](#data-sources)
+Lending Club had previously made all of their loan issuance and loan payments data public. This changed at the end of 2020 though with the retirement of their investing platform. Now all that's left are copies on the internet. Please see my folder [here](https://drive.google.com/drive/folders/1keM8zI9l5lWImY7tfggPMPWxuqStfb87?usp=sharing) for the 22 CSV files I have containing all the the issued loan data.
 
-## Future Work
+Many loans issued in 2007, 2008, and 2009 defaulted due to the effects of "The Great Recession". Lending Club ended up making changes to their credit model in an attempt to avoid seeing such a large number of loan defaults again. As a result, I have chosen to use only those loans issued in January 2010 or later. I have also chosen to exclude 60 month loans and focus on 36 month loans, as there are more completed loans available to train on. In the future I will expand this analysis to include 60 month loans. 
 
-So far I've only trained the following models:
+This results in data containing:
 
-* XGBoost
-* Random Choice
-* Select High Interest Loans
-* Select Low Interest Loans
+* 1,894,891 total loans
+* 1,097,123 completed loans
+*   797,768 still active loans
 
-XGBoost is the only machine learning algorithm out of those. Next steps are to add more machine learning models. Primarily:
+Lending Club provides over 100 features for each loan. The table below shows ten features as an example. 
 
-* Decision Tree
-* Random Forest
-* Gradient Boosted Trees
+| Feature Name        | Description                                                                          |
+|:-:| :-: |
+| `loan_amnt`           | The amount being borrowed.                                                           |
+| `int_rate`            | Interest rate of the loan.                                                           |
+| `grade`               | What grade (A-F) has Lending Club's internal credit model assigned to this borrower? |
+| `emp_length`          | How long has the borrower been employed at their current job?                        |
+| `home_ownership`      | Does the borrower rent or own their home?                                            |
+| `annual_inc `         | What is the borrower's annual income?                                                |
+| `verification_status` | Has the borrower's self-reported income information been verified?                   |
+| `purpose `            | What is the purpose of the loan?                                                     |
+| `dti`                 | What is the borrower's debt-to-income ratio?                                         |
+| `installment `        | Monthly payment due from borrower.                                                   |
 
-Additionally, I will be performing hyperparameter tuning and k-fold cross validation while continuing to evaluate models with the portfolio simulator. Once I have settled on a "winning" model I will be performing [SHAP analysis](https://github.com/slundberg/shap) on that model to better understand it's output. I do have an old [SHAP notebook](SHAP.ipynb) if you'd like an advanced preview.
 
-I will also be completing notebooks explaining the steps involved in data cleaning, exploratory data analysis, and calculating return on investment. In addition, I will be using the portfolio simulator to analyze what portfolio starting balances, minimium ROI, and amount to invest per loan offer the best returns for our model over the testing dataset. 
+Please see the [data dictionary](https://docs.google.com/spreadsheets/d/1d73eTwcifrFPEeMyrTd-3TjjvdDummkDu0tn_G-s7UY/edit?usp=sharing) for a full list of available features.
+
+
+More 2021 updates coming soon...
+
+## Exploratory Data Analysis
+
+
+![ROI-by-grade](img/ROIs-by-grade.png)
+
+![Models](img/model-comparison.png)
+
 
 ![ROI](img/balance_vs_roi.png)
-
-## Data Sources
-
-The data is provided free of charge by LendingClub. Please see their [Historical Loan Issuance Data](https://www.lendingclub.com/statistics/additional-statistics) page to download data on loans that have been issued. As of now this project uses all loan issuance files up to 2020-Q2. I also used loan payment data to calculate return on investment of completed loans. Please see [Payments Made to Investors](https://www.lendingclub.com/statistics/additional-statistics?) to acquire those files. 
